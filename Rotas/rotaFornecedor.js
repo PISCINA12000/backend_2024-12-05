@@ -12,5 +12,3 @@ rotaFornecedor.get("/:codigo", fornCtrl.consultar);
 rotaFornecedor.get("/",fornCtrl.consultar);
 
 export default rotaFornecedor;
-
-
