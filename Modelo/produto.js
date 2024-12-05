@@ -1,109 +1,98 @@
-import ProdutoDAO from "../Persistencia/produtoDAO.js";
-import Categoria from "./categoria.js";
-import Fornecedor from "./fornecedor.js";
-export default class Produto{
-    //atributos privados
-    #codigo;
-    #descricao;
-    #precoCusto;
-    #precoVenda;
-    #qtdEstoque;
-    #urlImagem;
-    #dataValidade;
-    #categoria;
-    #fornecedor;
+import ProdutoDAO from "../Persistencia/produtoDAO.js"
+import Categoria from "./categoria.js"
+import Fornecedor from "./fornecedor.js"
 
-    get codigo(){
-        return this.#codigo;
+export default class Produto{
+    #codigo
+    #descricao
+    #precoCusto
+    #precoVenda
+    #qtdEstoque
+    #urlImagem
+    #dataValidade
+    #categoria
+    #fornecedor
+
+    constructor(codigo=0, descricao="", precoCusto=0, precoVenda=0, qtdEstoque=0, urlImagem="", dataValidade="", categoria={}, fornecedor={}){
+        this.#codigo=codigo
+        this.#descricao=descricao
+        this.#precoCusto=precoCusto
+        this.#precoVenda=precoVenda
+        this.#qtdEstoque=qtdEstoque
+        this.#urlImagem=urlImagem
+        this.#dataValidade=dataValidade            
+        this.#categoria = categoria
+        this.#fornecedor = fornecedor
     }
 
+    get codigo(){
+        return this.#codigo
+    }
     set codigo(novoCodigo){
-        this.#codigo=novoCodigo;
+        this.#codigo=novoCodigo
     } 
 
     get descricao(){
-        return this.#descricao;
+        return this.#descricao
     }
-
     set descricao(novaDescricao){
-        this.#descricao = novaDescricao;
+        this.#descricao = novaDescricao
     }
 
     get precoCusto(){
-        return this.#precoCusto;
+        return this.#precoCusto
     }
-
     set precoCusto(novoPreco){
-        this.#precoCusto = novoPreco;
+        this.#precoCusto = novoPreco
     }
 
     get precoVenda(){
-        return this.#precoVenda;
+        return this.#precoVenda
     }
-
     set precoVenda(novoPreco){
-        this.#precoVenda = novoPreco;
+        this.#precoVenda = novoPreco
     }
 
     get qtdEstoque(){
-        return this.#qtdEstoque;
+        return this.#qtdEstoque
     }
-
     set qtdEstoque(novaQtd){
-        this.#qtdEstoque = novaQtd;
+        this.#qtdEstoque = novaQtd
     }
 
     get urlImagem(){
-        return this.#urlImagem;
+        return this.#urlImagem
     }
-
     set urlImagem(novaUrl){
-        this.#urlImagem=novaUrl;
+        this.#urlImagem=novaUrl
     }
 
     get dataValidade(){
-        return this.#dataValidade;
+        return this.#dataValidade
     }
-
     set dataValidade(novaData){
-        this.#dataValidade = novaData;
+        this.#dataValidade = novaData
     }
 
     get categoria(){
         return this.#categoria
     }
-
     set categoria(novaCategoria){
         if (novaCategoria instanceof Categoria){
-            this.#categoria = novaCategoria;
+            this.#categoria = novaCategoria
         }
     }
+
     get fornecedor(){
         return this.#fornecedor
     }
     set fornecedor(novoFornecedor){
         if(novoFornecedor instanceof Fornecedor)
         {
-            this.#fornecedor = novoFornecedor;
+            this.#fornecedor = novoFornecedor
         }
     }
-    //construtor (criador de um produto)
-    constructor(codigo=0, descricao="",precoCusto=0,precoVenda=0,qtdEstoque=0,
-                urlImagem="", dataValidade="", categoria={}, fornecedor={}){
-        this.#codigo=codigo;
-        this.#descricao=descricao;
-        this.#precoCusto=precoCusto;
-        this.#precoVenda=precoVenda;
-        this.#qtdEstoque=qtdEstoque;
-        this.#urlImagem=urlImagem;
-        this.#dataValidade=dataValidade;            
-        this.#categoria = categoria;
-        this.#fornecedor = fornecedor;
-    }
 
-    //override do método toJSON
-    //o método toJSON é chamado automaticamente quando um produto
-    //precisar ser convertido no formato JSON
     toJSON(){
         return {
             "codigo":this.#codigo,
@@ -119,24 +108,19 @@ export default class Produto{
     }
 
     async incluir(){
-        //instanciar a camada de persistencia do produto
-        const prodDAO = new ProdutoDAO();
-        await prodDAO.incluir(this); //this referência a si mesmo
+        const prodDAO = new ProdutoDAO()
+        await prodDAO.incluir(this)
     }
-
     async consultar(termo){
-        const prodDAO = new ProdutoDAO();
-        return await prodDAO.consultar(termo);
+        const prodDAO = new ProdutoDAO()
+        return await prodDAO.consultar(termo)
     }
-
     async excluir(){
-        const prodDAO = new ProdutoDAO();
-        await prodDAO.excluir(this);
+        const prodDAO = new ProdutoDAO()
+        await prodDAO.excluir(this)
     }
-
     async alterar(){
-        const prodDAO = new ProdutoDAO();
-        await prodDAO.alterar(this);
+        const prodDAO = new ProdutoDAO()
+        await prodDAO.alterar(this)
     }
 }
-

@@ -86,7 +86,7 @@ export default class ProdutoDAO {
                     dataValidade_prod = ?,
                     codigo_cat = ?,
                     codigo_forn = ?
-                WHERE prod_codigo = ?;`
+                WHERE codigo_prod = ?;`
             let parametros = [
                 produto.descricao,
                 produto.precoCusto,
