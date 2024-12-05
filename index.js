@@ -5,6 +5,7 @@ import rotaProduto from './Rotas/rotaProdutos.js'
 import rotaCategoria from './Rotas/rotaCategoria.js'
 import rotaFornecedor from './Rotas/rotaFornecedor.js'
 import rotaUsuario from './Rotas/rotaUsuario.js'
+import rotaCliente from './Rotas/rotaCliente.js'
 
 dotenv.config()
 
@@ -22,6 +23,7 @@ app.use("/produto",rotaProduto)
 app.use("/categoria",rotaCategoria)
 app.use("/fornecedor", rotaFornecedor)
 app.use("/usuario", rotaUsuario)
+app.use("/cliente", rotaCliente)
 
 app.listen(porta, host, () => {
     console.log(`Servidor escutando em http://${host}:${porta}`)

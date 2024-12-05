@@ -1,6 +1,6 @@
 import Fornecedor from "../Modelo/fornecedor.js"
-
 import conectar from "./Conexao.js"
+
 export default class FornecedorDAO {
     constructor() {
         this.init()
