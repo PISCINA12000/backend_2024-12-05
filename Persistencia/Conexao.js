@@ -1,13 +1,9 @@
-import mysql from 'mysql2/promise';
+import mysql from 'mysql2/promise'
 
-//Lembre-se, nossa aplicação neste momento estará se comunicando com outra aplicação.
-//Desse modo, nossa aplicação não tem controle sobre a outra.
-//O que exige uma comunicação assíncrona.
 export default async function conectar(){
     
     if (global.poolConexoes){
-        //retorna do pool uma conexão
-        return await poolConexoes.getConnection();
+        return await poolConexoes.getConnection()
     }
     else{
         global.poolConexoes = await mysql.createPool({
@@ -19,7 +15,7 @@ export default async function conectar(){
             "connectTimeout":60000,
             "waitForConnections":true,
             "queueLimit":20
-        });
-        return await global.poolConexoes.getConnection();
+        })
+        return await global.poolConexoes.getConnection()
     }
 }

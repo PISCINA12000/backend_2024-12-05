@@ -1,48 +1,62 @@
-//DAO - Data Access Object
-import Produto from "../Modelo/produto.js";
-import Categoria from "../Modelo/categoria.js";
+import Produto from "../Modelo/produto.js"
+import Categoria from "../Modelo/categoria.js"
+import Fornecedor from "../Modelo/fornecedor.js"
+import conectar from "./Conexao.js"
 
-import conectar from "./Conexao.js";
-import Fornecedor from "../Modelo/fornecedor.js";
 export default class ProdutoDAO {
     constructor() {
-        this.init();
+        this.init()
     }
 
     async init() {
         try 
         {
-            const conexao = await conectar(); //retorna uma conexão
+            const conexao = await conectar()
             const sql = `
             CREATE TABLE IF NOT EXISTS produto(
-                prod_codigo INT NOT NULL AUTO_INCREMENT,
-                prod_descricao VARCHAR(200) NOT NULL,
-                prod_precoCusto DECIMAL(10,2) NOT NULL,
-                prod_precoVenda DECIMAL(10,2) NOT NULL,
-                prod_qtdEstoque INT NOT NULL DEFAULT 0,
-                prod_urlImagem VARCHAR(250),
-                prod_dataValidade VARCHAR(250) NOT NULL,
-                fk_codigo_cat INT NOT NULL,
-                fk_codigo_forn INT NOT NULL,
-                CONSTRAINT pk_produto PRIMARY KEY(prod_codigo),
-                CONSTRAINT fk_categoria FOREIGN KEY(fk_codigo_cat) REFERENCES categoria(codigo),
-                CONSTRAINT fk_fornecedor FOREIGN KEY(fk_codigo_forn) REFERENCES fornecedor(forn_codigo) 
-            )
-        `;
-            await conexao.execute(sql);
-            await conexao.release();
+                codigo_prod INT NOT NULL AUTO_INCREMENT,
+                descricao_prod VARCHAR(200) NOT NULL,
+                precoCusto_prod DECIMAL(10,2) NOT NULL,
+                precoVenda_prod DECIMAL(10,2) NOT NULL,
+                qtdEstoque_prod INT NOT NULL DEFAULT 0,
+                urlImagem_prod VARCHAR(250),
+                dataValidade_prod VARCHAR(250) NOT NULL,
+                codigo_cat INT NOT NULL,
+                codigo_forn INT NOT NULL,
+
+                CONSTRAINT pk_produto
+                    PRIMARY KEY(codigo_prod),
+                CONSTRAINT fk_categoria
+                    FOREIGN KEY(codigo_cat)
+                    REFERENCES categoria(codigo_cat),
+                CONSTRAINT fk_fornecedor
+                    FOREIGN KEY(codigo_forn)
+                    REFERENCES fornecedor(codigo_forn) 
+            );`
+            await conexao.execute(sql)
+            await conexao.release()
         }
         catch (e) {
-            console.log("Não foi possível iniciar o banco de dados: " + e.message);
+            console.log("Não foi possível iniciar o banco de dados: " + e.message)
         }
     }
 
     async incluir(produto) {
         if (produto instanceof Produto) {
-            const conexao = await conectar();
-            const sql = `INSERT INTO produto(prod_descricao,prod_precoCusto,prod_precoVenda,prod_qtdEstoque,prod_urlImagem,prod_dataValidade, fk_codigo_cat, fk_codigo_forn)
-                values(?,?,?,?,?,?,?,?)
-            `;
+            const conexao = await conectar()
+            const sql = `
+                INSERT
+                INTO
+                    produto(
+                        descricao_prod,
+                        precoCusto_prod,
+                        precoVenda_prod,
+                        qtdEstoque_prod,
+                        urlImagem_prod,
+                        dataValidade_prod,
+                        codigo_cat,
+                        codigo_forn
+                    ) values(?,?,?,?,?,?,?,?);`
             let parametros = [
                 produto.descricao,
                 produto.precoCusto,
@@ -52,18 +66,27 @@ export default class ProdutoDAO {
                 produto.dataValidade,
                 produto.categoria.codigo,
                 produto.fornecedor.codigo
-            ]; //dados do produto
-            const resultado = await conexao.execute(sql, parametros);
-            produto.codigo = resultado[0].insertId;
-            await conexao.release(); //libera a conexão
+            ]
+            const resultado = await conexao.execute(sql, parametros)
+            produto.codigo = resultado[0].insertId
+            await conexao.release()
         }
     }
     async alterar(produto) {
         if (produto instanceof Produto) {
-            const conexao = await conectar();
-            const sql = `UPDATE produto SET prod_descricao=?,prod_precoCusto=?,prod_precoVenda=?,prod_qtdEstoque=?,prod_urlImagem=?,prod_dataValidade=?,fk_codigo_cat=?,fk_codigo_forn=?
-                WHERE prod_codigo = ?
-            `;
+            const conexao = await conectar()
+            const sql = `
+                UPDATE produto
+                SET
+                    descricao_prod = ?,
+                    precoCusto_prod = ?,
+                    precoVenda_prod = ?,
+                    qtdEstoque_prod = ?,
+                    urlImagem_prod = ?,
+                    dataValidade_prod = ?,
+                    codigo_cat = ?,
+                    codigo_forn = ?
+                WHERE prod_codigo = ?;`
             let parametros = [
                 produto.descricao,
                 produto.precoCusto,
@@ -74,60 +97,78 @@ export default class ProdutoDAO {
                 produto.categoria.codigo,
                 produto.fornecedor.codigo,
                 produto.codigo
-            ]; //dados do produto
-            await conexao.execute(sql, parametros);
-            await conexao.release(); //libera a conexão
+            ]
+            await conexao.execute(sql, parametros)
+            await conexao.release()
         }
     }
     async consultar(termo) {
-        //resuperar as linhas da tabela produto e transformá-las de volta em produtos
-        const conexao = await conectar();
-        let sql = "";
-        let parametros = [];
+        const conexao = await conectar()
+        let sql = ""
+        let parametros = []
         if (isNaN(parseInt(termo))) {
-            sql = `SELECT * FROM produto p
-                   INNER JOIN categoria c ON p.fk_codigo_cat = c.codigo
-                   INNER JOIN fornecedor f ON p.fk_codigo_forn = f.forn_codigo
-                   WHERE prod_descricao LIKE ?`;
-            parametros = ['%' + termo + '%'];
+            sql = `
+                SELECT *
+                FROM produto p
+                INNER JOIN categoria c ON p.codigo_cat = c.codigo_cat
+                INNER JOIN fornecedor f ON p.codigo_forn = f.codigo_forn
+                WHERE descricao_prod LIKE ?;`
+            parametros = ['%' + termo + '%']
         }
         else {
-            sql = `SELECT * FROM produto p
-                   INNER JOIN categoria c ON p.fk_codigo_cat = c.codigo 
-                   INNER JOIN fornecedor f ON p.fk_codigo_forn = f.forn_codigo
-                   WHERE prod_codigo = ?`
-            parametros = [termo];
+            sql = `
+                SELECT *
+                FROM produto p
+                INNER JOIN categoria c ON p.codigo_cat = c.codigo_cat
+                INNER JOIN fornecedor f ON p.codigo_forn = f.codigo_forn
+                WHERE codigo_prod = ?;`
+            parametros = [termo]
         }
-        const [linhas, campos] = await conexao.execute(sql, parametros);
-        let listaProdutos = [];
+        const [linhas, campos] = await conexao.execute(sql, parametros)
+        let listaProdutos = []
         for (const linha of linhas) {
-            const categoria = new Categoria(linha['codigo'],linha["descricao"]);   
-            const fornecedor = new Fornecedor(linha['forn_codigo'], linha['forn_nome'], linha['forn_cep'], linha['forn_cidade'], linha['forn_cnpj'], linha['forn_endereco'], linha['forn_telefone']); 
+            const categoria = new Categoria(
+                linha['codigo_cat'],
+                linha['descricao_cat']
+            )   
+            const fornecedor = new Fornecedor(
+                linha['codigo_forn'],
+                linha['nome_forn'],
+                linha['cep_forn'],
+                linha['cidade_forn'],
+                linha['cnpj_forn'],
+                linha['endereco_forn'],
+                linha['telefone_forn']
+            )
             const produto = new Produto(
-                linha['prod_codigo'],
-                linha['prod_descricao'],
-                linha['prod_precoCusto'],
-                linha['prod_precoVenda'],
-                linha['prod_qtdEstoque'],
-                linha['prod_urlImagem'],
-                linha['prod_dataValidade'],
+                linha['codigo_prod'],
+                linha['descricao_prod'],
+                linha['precoCusto_prod'],
+                linha['precoVenda_prod'],
+                linha['qtdEstoque_prod'],
+                linha['urlImagem_prod'],
+                linha['dataValidade_prod'],
                 categoria,
                 fornecedor
-            );
-            listaProdutos.push(produto);
+            )
+            listaProdutos.push(produto)
         }
-        await conexao.release();
-        return listaProdutos;
+        await conexao.release()
+
+        return listaProdutos
     }
     async excluir(produto) {
         if (produto instanceof Produto) {
-            const conexao = await conectar();
-            const sql = `DELETE FROM produto WHERE prod_codigo = ?`;
+            const conexao = await conectar()
+            const sql = `
+                DELETE
+                FROM produto
+                WHERE codigo_prod = ?;`
             let parametros = [
                 produto.codigo
-            ]; //dados do produto
-            await conexao.execute(sql, parametros);
-            await conexao.release(); //libera a conexão
+            ]
+            await conexao.execute(sql, parametros)
+            await conexao.release()
         }
     }
 }
