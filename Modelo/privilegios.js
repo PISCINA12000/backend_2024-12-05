@@ -25,8 +25,8 @@ export default class Privilegio {
 
     toJSON() {
         return {
-            codigo: this.#codigo,
-            descricao: this.#descricao
+            "codigo": this.#codigo,
+            "descricao": this.#descricao
         }
     }
 
