@@ -6,13 +6,15 @@ export default class Usuario {
     #nome
     #endereco
     #telefone
+    #senha
     #privilegio
 
-    constructor(codigo = 0, nome = "", endereco = "", telefone = "", privilegio = {}) {
+    constructor(codigo = 0, nome = "", endereco = "", telefone = "", senha = "", privilegio = {}) {
         this.#codigo = codigo
         this.#nome = nome
         this.#endereco = endereco
         this.#telefone = telefone
+        this.#senha = senha
         this.#privilegio = privilegio
     }
 
@@ -44,6 +46,13 @@ export default class Usuario {
         this.#telefone = value
     }
 
+    get senha() {
+        return this.#senha
+    }
+    set senha(value) {
+        this.#senha = value
+    }
+
     get privilegio(){
         return this.#privilegio
     }
@@ -59,6 +68,7 @@ export default class Usuario {
             "nome": this.#nome,
             "endereco": this.#endereco,
             "telefone": this.#telefone,
+            "senha": this.#senha,
             "privilegio": this.#privilegio
         }
     }

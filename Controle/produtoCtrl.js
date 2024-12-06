@@ -49,7 +49,6 @@ export default class ProdutoCtrl {
                                     }
                                 )
                             }
-
                         }
                         else {
                             resposta.status(400).json({
@@ -62,7 +61,6 @@ export default class ProdutoCtrl {
                             "status": false,
                             "mensagem": "Não foi possível validar o fornecedor" + erro.message
                         })
-
                     })
                 } else {
                     resposta.status(400).json({
@@ -70,8 +68,6 @@ export default class ProdutoCtrl {
                         "mensagem": "A categoria informada não existe!"
                     })
                 }
-
-
             }).catch((erro) => {
                 resposta.status(500).json({
                     "status": false,
@@ -84,9 +80,7 @@ export default class ProdutoCtrl {
                 "status": false,
                 "mensagem": "Requisição inválida! Consulte a documentação da API."
             })
-
         }
-
     }
 
     editar(requisicao, resposta) {

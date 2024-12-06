@@ -9,13 +9,14 @@ export default class UsuarioDAO {
 
     async init() {
         try{
-            const conexao = await conectar() //retorna uma conexão
+            const conexao = await conectar()
             const sql = `
                 CREATE TABLE IF NOT EXISTS usuario(
                     codigo_user INT NOT NULL AUTO_INCREMENT,
                     nome_user VARCHAR(200) NOT NULL,
                     endereco_user VARCHAR(200) NOT NULL,
                     telefone_user VARCHAR(200) NOT NULL,
+                    senha_user VARCHAR(200) NOT NULL,
                     codigo_pvl INT NOT NULL,
 
                     CONSTRAINT pk_usuario
@@ -36,12 +37,13 @@ export default class UsuarioDAO {
             const conexao = await conectar()
             const sql = `
                 INSERT
-                INTO usuario(nome_user, endereco_user, telefone_user, codigo_pvl)
-                    values(?,?,?,?);`
+                INTO usuario(nome_user, endereco_user, telefone_user, senha_user, codigo_pvl)
+                    values(?,?,?,?,?);`
             let parametros = [
                 usuario.nome,
                 usuario.endereco,
                 usuario.telefone,
+                usuario.senha,
                 usuario.privilegio.codigo
             ]
             const resultado = await conexao.execute(sql, parametros)
@@ -54,12 +56,13 @@ export default class UsuarioDAO {
             const conexao = await conectar()
             const sql = `
                 UPDATE usuario
-                SET nome_user=?, endereco_user=?, telefone_user=?, codigo_pvl=?
+                SET nome_user=?, endereco_user=?, telefone_user=?, senha_user=?, codigo_pvl=?
                 WHERE codigo_user = ?;`
             let parametros = [
                 usuario.nome,
                 usuario.endereco,
                 usuario.telefone,
+                usuario.senha,
                 usuario.privilegio.codigo,
                 usuario.codigo
             ]
@@ -101,6 +104,7 @@ export default class UsuarioDAO {
                 linha['nome_user'],
                 linha['endereco_user'],
                 linha['telefone_user'],
+                linha['senha_user'],
                 privilegio
             )
             listaUsuarios.push(usuario)

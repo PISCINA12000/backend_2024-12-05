@@ -10,6 +10,7 @@ export default class UsuarioCtrl {
             const nome = requisicao.body.nome
             const endereco = requisicao.body.endereco
             const telefone = requisicao.body.telefone
+            const senha = requisicao.body.senha
             const privilegio = requisicao.body.privilegio
 
             const privi = new Privilegio(privilegio.codigo)
@@ -17,7 +18,7 @@ export default class UsuarioCtrl {
             privi.consultar(privilegio.codigo).then((listaPrivilegios) => {
                 if (listaPrivilegios.length > 0) {
                     if (nome && endereco && telefone) {
-                        const usuario = new Usuario(0, nome, endereco, telefone, privi)
+                        const usuario = new Usuario(0, nome, endereco, telefone, senha, privi)
                         usuario.gravar()
                             .then(() => {
                                 resposta.status(200).json({
@@ -74,6 +75,7 @@ export default class UsuarioCtrl {
             const nome = requisicao.body.nome
             const endereco = requisicao.body.endereco
             const telefone = requisicao.body.telefone
+            const senha = requisicao.body.senha
             const privilegio = requisicao.body.privilegio
 
             const privi = new Privilegio(privilegio.codigo)
@@ -81,9 +83,9 @@ export default class UsuarioCtrl {
             privi.consultar(privilegio.codigo)
             .then((listaPrivilegios)=>{
                 if(listaPrivilegios.length > 0){
-                    if (codigo > 0 && nome && endereco && telefone) {
+                    if (codigo > 0 && nome && endereco && telefone && senha) {
                         //alterar a categoria
-                        const usuario = new Usuario(codigo, nome, endereco, telefone, privi)
+                        const usuario = new Usuario(codigo, nome, endereco, telefone, senha, privi)
                         usuario.editar().then(() => {
                             resposta.status(200).json({
                                 "status": true,
