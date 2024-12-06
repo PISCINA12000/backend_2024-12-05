@@ -1,16 +1,19 @@
 import UsuarioDAO from "../Persistencia/usuarioDAO.js"
+import Privilegio from "./privilegios.js"
 
 export default class Usuario {
     #codigo
     #nome
     #endereco
     #telefone
+    #privilegio
 
-    constructor(codigo = 0, nome = "", endereco = "", telefone = "") {
+    constructor(codigo = 0, nome = "", endereco = "", telefone = "", privilegio = {}) {
         this.#codigo = codigo
         this.#nome = nome
         this.#endereco = endereco
         this.#telefone = telefone
+        this.#privilegio = privilegio
     }
 
     get codigo() {
@@ -41,13 +44,22 @@ export default class Usuario {
         this.#telefone = value
     }
 
-    // Método toJSON para conversão em JSON
+    get privilegio(){
+        return this.#privilegio
+    }
+    set privilegio(novoPrivilegio){
+        if (novoPrivilegio instanceof Privilegio){
+            this.#privilegio = novoPrivilegio
+        }
+    }
+
     toJSON() {
         return {
             "codigo": this.#codigo,
             "nome": this.#nome,
             "endereco": this.#endereco,
-            "telefone": this.#telefone
+            "telefone": this.#telefone,
+            "privilegio": this.#privilegio
         }
     }
 
@@ -55,17 +67,14 @@ export default class Usuario {
         const usuarioDAO = new UsuarioDAO()
         await usuarioDAO.gravar(this)
     }
-
     async editar() {
         const usuarioDAO = new UsuarioDAO()
         await usuarioDAO.editar(this)
     }
-
     async excluir() {
         const usuarioDAO = new UsuarioDAO()
         await usuarioDAO.excluir(this)
     }
-
     async consultar(termo) {
         const usuarioDAO = new UsuarioDAO()
         return await usuarioDAO.consultar(termo)

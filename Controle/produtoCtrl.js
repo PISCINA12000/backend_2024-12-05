@@ -15,6 +15,7 @@ export default class ProdutoCtrl {
             const dataValidade = requisicao.body.dataValidade
             const categoria = requisicao.body.categoria
             const fornecedor = requisicao.body.fornecedor
+
             const categ = new Categoria(categoria.codigo)
             const forn = new Fornecedor(fornecedor.codigo)
 
@@ -100,6 +101,7 @@ export default class ProdutoCtrl {
             const dataValidade = requisicao.body.dataValidade
             const categoria = requisicao.body.categoria
             const fornecedor = requisicao.body.fornecedor
+            
             const categ = new Categoria(categoria.codigo)
             const forn = new Fornecedor(fornecedor.codigo)
 

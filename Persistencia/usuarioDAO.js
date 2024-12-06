@@ -15,9 +15,12 @@ export default class UsuarioDAO {
                     nome_user VARCHAR(200) NOT NULL,
                     endereco_user VARCHAR(200) NOT NULL,
                     telefone_user VARCHAR(200) NOT NULL,
+                    codigo_pvl INT NOT NULL,
 
                     CONSTRAINT pk_usuario
-                        PRIMARY KEY(codigo_user)
+                        PRIMARY KEY (codigo_user),
+                    CONSTRAINT fk_privilegio
+                        FOREIGN KEY (codigo_pvl) REFERENCES privilegio (codigo_pvl)
                 );`
             await conexao.execute(sql)
             await conexao.release()
@@ -32,12 +35,13 @@ export default class UsuarioDAO {
             const conexao = await conectar()
             const sql = `
                 INSERT
-                INTO usuario(nome_user, endereco_user, telefone_user)
-                    values(?,?,?);`
+                INTO usuario(nome_user, endereco_user, telefone_user, codigo_pvl)
+                    values(?,?,?,?);`
             let parametros = [
                 usuario.nome,
                 usuario.endereco,
-                usuario.telefone
+                usuario.telefone,
+                usuario.privilegio.codigo
             ] 
             const resultado = await conexao.execute(sql, parametros)
             usuario.codigo = resultado[0].insertId
@@ -49,12 +53,13 @@ export default class UsuarioDAO {
             const conexao = await conectar()
             const sql = `
                 UPDATE usuario
-                SET nome_user=?, endereco_user=?, telefone_user=?
+                SET nome_user=?, endereco_user=?, telefone_user=?, codigo_pvl=?
                 WHERE codigo_user = ?;`
             let parametros = [
                 usuario.nome,
                 usuario.endereco,
                 usuario.telefone,
+                usuario.privilegio.codigo,
                 usuario.codigo
             ]
             await conexao.execute(sql, parametros)
@@ -63,7 +68,6 @@ export default class UsuarioDAO {
         }
     }
     async consultar(termo) {
-        //resuperar as linhas da tabela produto e transformá-las de volta em produtos
         const conexao = await conectar()
         let sql = ""
         let parametros = []
@@ -88,7 +92,8 @@ export default class UsuarioDAO {
                 linha['codigo_user'],
                 linha['nome_user'],
                 linha['endereco_user'],
-                linha['telefone_user']
+                linha['telefone_user'],
+                linha['codigo_pvl']
             )
             listaUsuarios.push(usuario)
         }
