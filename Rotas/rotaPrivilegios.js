@@ -1,7 +1,7 @@
 import { Router } from "express"
 import PrivilegioCtrl from "../Controle/privilegiosCtrl.js"
 
-const pvlCtrl = new CategoriaCtrl()
+const pvlCtrl = new PrivilegioCtrl()
 const rotaPrivilegio = Router()
 
 rotaPrivilegio.post("/", pvlCtrl.gravar)
