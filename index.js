@@ -25,7 +25,7 @@ app.use("/categoria",rotaCategoria)
 app.use("/fornecedor", rotaFornecedor)
 app.use("/usuario", rotaUsuario)
 app.use("/cliente", rotaCliente)
-app.use("/privilegios", rotaPrivilegio)
+app.use("/privilegio", rotaPrivilegio)
 
 app.listen(porta, host, () => {
     console.log(`Servidor escutando em http://${host}:${porta}`)
