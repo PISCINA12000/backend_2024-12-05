@@ -42,7 +42,7 @@ export default class UsuarioDAO {
                 usuario.endereco,
                 usuario.telefone,
                 usuario.privilegio.codigo
-            ] 
+            ]
             const resultado = await conexao.execute(sql, parametros)
             usuario.codigo = resultado[0].insertId
             await conexao.release()
@@ -75,7 +75,8 @@ export default class UsuarioDAO {
             sql = `
                 SELECT *
                 FROM usuario
-                WHERE codigo_user LIKE ?;`
+                WHERE nome_user LIKE ?
+                ORDER BY nome_user;`
             parametros = ['%' + termo + '%']
         }
         else {
