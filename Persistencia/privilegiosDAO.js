@@ -32,7 +32,7 @@ export default class PrivilegioDAO{
             const conexao = await conectar()
             const sql = `
                 INSERT
-                INTO privilegio(descricao_pvl)
+                INTO privilegio(descricao_pv)
                     VALUES (?);`
             const parametros = [privilegio.descricao]
             const resultado = await conexao.execute(sql,parametros)

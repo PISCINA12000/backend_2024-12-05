@@ -1,3 +1,4 @@
+import Privilegio from "../Modelo/privilegios.js"
 import Usuario from "../Modelo/usuario.js"
 import conectar from "./Conexao.js"
 
@@ -74,27 +75,33 @@ export default class UsuarioDAO {
         if (isNaN(parseInt(termo))) {
             sql = `
                 SELECT *
-                FROM usuario
-                WHERE nome_user LIKE ?
-                ORDER BY nome_user;`
+                FROM usuario u
+                INNER JOIN privilegio p ON p.codigo_pvl = u.codigo_pvl
+                WHERE u.nome_user LIKE ?
+                ORDER BY u.nome_user;`
             parametros = ['%' + termo + '%']
         }
         else {
             sql = `
                 SELECT *
-                FROM usuario
-                WHERE codigo_user = ?;`
+                FROM usuario u
+                INNER JOIN privilegio p ON p.codigo_pvl = u.codigo_pvl
+                WHERE u.codigo_user = ?;`
             parametros = [termo]
         }
         const [linhas, campos] = await conexao.execute(sql, parametros)
         let listaUsuarios = []
         for (const linha of linhas) {
+            const privilegio = new Privilegio(
+                linha['codigo_pvl'],
+                linha['descricao_pvl']
+            )
             const usuario = new Usuario(
                 linha['codigo_user'],
                 linha['nome_user'],
                 linha['endereco_user'],
                 linha['telefone_user'],
-                linha['codigo_pvl']
+                privilegio
             )
             listaUsuarios.push(usuario)
         }
