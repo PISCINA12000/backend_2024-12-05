@@ -16,7 +16,7 @@ export default class UsuarioCtrl {
             const privi = new Privilegio(privilegio.codigo)
             privi.consultar(privilegio.codigo)
                 .then((listaPrivilegios) => {
-                    if (listaPrivilegios.length() > 0) {
+                    if (listaPrivilegios.lenght > 0) {
                         //pseudo validação
                         if (nome && endereco && telefone) {
                             const usuario = new Usuario(0, nome, endereco, telefone, privi)
@@ -82,7 +82,7 @@ export default class UsuarioCtrl {
 
             privi.consultar(privilegio.codigo)
             .then((listaPrivilegios)=>{
-                if(listaPrivilegios.length() > 0){
+                if(listaPrivilegios.length > 0){
                     if (codigo > 0 && nome && endereco && telefone) {
                         //alterar a categoria
                         const usuario = new Usuario(codigo, nome, endereco, telefone, privi)
